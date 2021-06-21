@@ -4,8 +4,7 @@ var resultsFromCsv = [];
 var itemFromShopify = [];
 
 
-function updateInventory (){
-
+function updateInventoryFromLivingsport (){
 fs.createReadStream('InventoryList.csv')
   .pipe(csv())
   .on('data', (row) => {
@@ -25,4 +24,4 @@ fs.createReadStream('InventoryList.csv')
     });
   });
 }
-updateInventory();
+updateInventoryFromLivingsport();
