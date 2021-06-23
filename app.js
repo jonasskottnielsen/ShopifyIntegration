@@ -9,8 +9,8 @@ const location_id = '6884556842';
 function updateInventoryFromLivingsport (){
 var options = {
   'method': 'GET',
-  'url': 'https://5d7873324b99aa9feeca55e01e8c02d9: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@barecykling.myshopify.com/admin/api/2021-04/products/6774582771885.json',
-  //'url': 'https://5d7873324b99aa9feeca55e01e8c02d9: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@barecykling.myshopify.com/admin/api/2021-04/products.json',
+  //'url': 'https://5d7873324b99aa9feeca55e01e8c02d9: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@barecykling.myshopify.com/admin/api/2021-04/products/6774582771885.json',
+  'url': 'https://5d7873324b99aa9feeca55e01e8c02d9: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@barecykling.myshopify.com/admin/api/2021-04/products.json',
   'headers': {
   }
 };
@@ -18,7 +18,7 @@ var options = {
 request(options, function (error, response) {
   if (error) throw new Error(error);
   var products = JSON.parse(response.body);// obj
-  console.log(products.product.variants);
+  //console.log(products.product.variants);
   console.log(products);
   //console.dir(JSON.parse(response.body).products[3]) //tager sku-nr  
   /*for(i=0; i < 50; i++){
@@ -49,6 +49,9 @@ request(options, function (error, response) {
 }
 updateInventoryFromLivingsport();
 
+/* 
+Først kald shopify og få alle sku'er + variants.inventory_item_id
+*/
 
 /* de id'er der skal bruges til at updatere en produkt variant.
 {
