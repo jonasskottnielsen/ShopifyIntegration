@@ -5,6 +5,7 @@ var request = require('request');
 var resultsFromCsv = [];
 var itemFromShopify = [];
 const location_id = '6884556842';
+var counter = 1;
 // shopify
 function updateInventoryFromLivingsport (){
 var options = {
@@ -15,48 +16,44 @@ var options = {
   }
 };
 // parse tager json-string -> js-obj
-request(options, function (error, response) {
+/*request(options, function (error, response) {
   if (error) throw new Error(error);
-  var data = JSON.parse(response.body);// obj
-  //console.log(products.product.variants);
-  //console.log(data.products[0].variants)
-  //console.log(data);
-  for(i=0; i < 1; i++){
-    console.log(JSON.parse(response.body).products[i].variants[0].sku) //tager sku-nr
-    console.log(JSON.parse(response.body).products[i].title)
-    console.log(JSON.parse(response.body).products[0])
+  var data = JSON.parse(response.body);
+
+  for(i=0; i < data.products.length; i++){
+    
+    for(j=0; j < data.products[i].variants.length; j++){
+        itemFromShopify.push({
+              nr : counter,
+              sku : JSON.parse(response.body).products[i].variants[j].sku, 
+              inventory_item_id : JSON.parse(response.body).products[i].variants[j].inventory_item_id});
+        counter += 1;
+    }
   }
-  //console.dir(JSON.parse(response.body).products[3]) //tager sku-nr  
-  /*for(i=0; i < (JSON.parse(response.body).products.lenght); i++){
-    console.log(JSON.parse(response.body).products[i].variants[0].sku) //tager sku-nr
-    console.log(JSON.parse(response.body).products[i].title)
-    console.log('----------------')
-  }*/
+  console.log(itemFromShopify) 
+});*/
+  //excel
+fs.createReadStream('RLVNTPriceStocki.csv')
+.pipe(csv({ separator: ';' }))
+.on('data', (row) => {
+  const item = {
+      Product: `${row["PRODUCT"]}`,
+      Price: `${row["PRICE"]}`,
+      Quantity: `${row["INVENTORY"]}`,
+      sku : `${row['YOUR.SKU']}`
+  };
+  resultsFromCsv.push(item);
+})
+.on('end', () => {
+  console.log(resultsFromCsv)
 });
-//excel
-/*fs.createReadStream('InventoryList.csv')
-  .pipe(csv())
-  .on('data', (row) => {
-    const item = {
-        sku: `${row["LivingSport SKU no."]}`,
-        Quantity: `${row["Quantity"]}`,
-        Arrival: `${row["Next Arrival"]}`,
-        brand: `${row["Brand"]}`
-    };
-    resultsFromCsv.push(item);
-  })
-  .on('end', () => {
-    //console.log(resultsFromCsv)
-    resultsFromCsv.forEach(element => {
-      console.log(element);
-      console.log('--------------')
-    });
-  });*/
 }
+
 updateInventoryFromLivingsport();
 
 /* 
-Først kald shopify og få alle sku'er + variants.inventory_item_id
+Først kald shopify og få alle id'er
+sku'er + variants.inventory_item_id
 */
 
 /* de id'er der skal bruges til at updatere en produkt variant.
