@@ -17,11 +17,17 @@ var options = {
 // parse tager json-string -> js-obj
 request(options, function (error, response) {
   if (error) throw new Error(error);
-  var products = JSON.parse(response.body);// obj
+  var data = JSON.parse(response.body);// obj
   //console.log(products.product.variants);
-  console.log(products);
+  //console.log(data.products[0].variants)
+  //console.log(data);
+  for(i=0; i < 1; i++){
+    console.log(JSON.parse(response.body).products[i].variants[0].sku) //tager sku-nr
+    console.log(JSON.parse(response.body).products[i].title)
+    console.log(JSON.parse(response.body).products[0])
+  }
   //console.dir(JSON.parse(response.body).products[3]) //tager sku-nr  
-  /*for(i=0; i < 50; i++){
+  /*for(i=0; i < (JSON.parse(response.body).products.lenght); i++){
     console.log(JSON.parse(response.body).products[i].variants[0].sku) //tager sku-nr
     console.log(JSON.parse(response.body).products[i].title)
     console.log('----------------')
