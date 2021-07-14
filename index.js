@@ -14,7 +14,8 @@ app = express();
                 | | | | | | 
                 | | | | | |
                 * * * * * *
-*/
+                  30 16 * * * // opdaterer 16.30 hver dag ca 30 min efter at csv filerne kommer fra leverandøren
+                */
    cron.schedule('* * * * *', function() {
   console.log('running a task every minute');
   console.log(msg);
