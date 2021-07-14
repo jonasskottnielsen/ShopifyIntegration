@@ -1,0 +1,28 @@
+{
+  "name": "ShopifyIntegration",
+  "version": "1.0.0",
+  "description": "testing node stuff",
+  "main": "app.js",
+  "dependencies": {
+    "csv-parse": "^4.16.0",
+    "csv-parser": "^3.0.0",
+    "express": "^4.17.1",
+    "node-cron": "^2.0.3",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonasskottnielsen/ShopifyIntegration.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonasskottnielsen/ShopifyIntegration/issues"
+  },
+  "homepage": "https://github.com/jonasskottnielsen/ShopifyIntegration#readme"
+}
