@@ -1,6 +1,8 @@
 const cron = require('node-cron');
 const express = require('express');
-var msg = require('./fun.js');
+
+const ftp = require('./ftp-connection.js')
+
 app = express();
 
 // Schedule tasks to be run on the server.
@@ -16,9 +18,9 @@ app = express();
                 * * * * * *
                   30 16 * * * // opdaterer 16.30 hver dag ca 30 min efter at csv filerne kommer fra leverandøren
                 */
-   cron.schedule('* * * * *', function() {
-  console.log('running a task every minute');
-  console.log(msg);
+cron.schedule('* * * * *', function() {
+    ftp.baresundhed;
+    ftp.livingSportFtp;
 });
 
 app.listen(3000);

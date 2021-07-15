@@ -1,6 +1,6 @@
+require('dotenv').config()
 const ftp = require("basic-ftp")
-
-//livingSportFtp();
+livingSportFtp();
 baresundhed();
 
 async function livingSportFtp() {
@@ -8,9 +8,9 @@ async function livingSportFtp() {
     client.ftp.verbose = true
     try {
         await client.access({
-            host: 'mail.medicsport.dk',
-            user: 'FTPMEDICSPORT',
-            password: 'wsxEDC12',
+            host: process.env.FTP_LIVINGSPORT_HOST,
+            user: process.env.FTP_LIVINGSPORT_USER,
+            password: process.env.FTP_LIVINGSPORT_PASSWORD,
             secure: false
             })
         console.log(await client.list())
@@ -39,20 +39,33 @@ async function baresundhed() {
     }
     client.close()
 }
+async function request (ftp_host, ftp_user, ftp_password, newFileName, fileToDownload) {
+    const client = new ftp.Client()
+    client.ftp.verbose = true
+    try {
+        await client.access({
+            host: ftp_host,
+            user: ftp_user,
+            password: ftp_password,
+            secure: false
+            })
+        console.log(await client.list())
+        await client.downloadTo(newFileName, fileToDownload)
+    }
+    catch(err) {
+        console.log(err);
+    }
+    client.close();
+}
 
+module.exports.baresundhed = () => {'baresundhed'};
+module.exports.livingSportFtp = () => {'livingsport'};
 
 /* 
 await client.access({
         host: 'ftp.jonassnielsen.dk',
         user: 'jonasftp@jonassnielsen.dk',
         password: '$DF,k{RF^WMt',
-        secure: false
-        })
-        
-await client.access({
-        host: 'mail.medicsport.dk',
-        user: 'FTPMEDICSPORT',
-        password: 'wsxEDC12',
         secure: false
         })
 */
