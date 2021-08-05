@@ -4,8 +4,9 @@ var request = require('request');
 
 var resultsFromCsv = [];
 var itemFromShopify = [];
-const itemsToUpdate = [];
+var itemsToUpdate = [];
 const location_id = '6884556842'; // baresundhed
+var livingsport_id = '37189582930';
 var counter = 1;
 
 // shopify
@@ -25,11 +26,13 @@ request(options, function (error, response) {
   for(i=0; i < data.products.length; i++){
     
     for(j=0; j < data.products[i].variants.length; j++){
-        itemFromShopify.push({
-              nr : counter,
-              sku : JSON.parse(response.body).products[i].variants[j].sku, 
-              inventory_item_id : JSON.parse(response.body).products[i].variants[j].inventory_item_id});
-        counter += 1;
+        if (JSON.parse(response.body).products[i].variants[j].sku){
+          itemFromShopify.push({
+            nr : counter,
+            sku : JSON.parse(response.body).products[i].variants[j].sku, 
+            inventory_item_id : JSON.parse(response.body).products[i].variants[j].inventory_item_id});
+      counter += 1;
+        }
     }
   }
   console.log(itemFromShopify) 
@@ -70,21 +73,17 @@ function getInventoryFromExcel() {
   }); 
 }
 
-function myFunc(arg) {
-  console.log(`arg was => ${arg}`);
-}
-
 function compare(){
 for(i=0; i<itemFromShopify.length; i++){
-
+  //for(i=0; i<10; i++){
   for(j=0; j<resultsFromCsv.length; j++){
     if (typeof itemFromShopify[i].sku==='undefined'){
       console.log('sku is undefined');
     } else {
-      if (itemFromShopify[i].sku === resultsFromCsv[j]['2']){
+      if (itemFromShopify[i].sku === resultsFromCsv[j]['0']){
         itemsToUpdate.push({
           sku: itemFromShopify[i].sku, 
-          available: resultsFromCsv[j]['1'],
+          available: resultsFromCsv[j]['3'],
           inventory_item_id : itemFromShopify[i].inventory_item_id
         });
         console.log('-------------------')
@@ -98,12 +97,13 @@ for(i=0; i<itemFromShopify.length; i++){
 console.log(itemsToUpdate)
 }
 var testData = [
-  {inventory_item_id: 41450215932077, location_id: 37189550162, available: 11},
-  {inventory_item_id: 39861769011373, location_id: 37189582930, available: 273}
+  {inventory_item_id: 39861769011373, location_id: 37189582930, available: 273},
+  {inventory_item_id: 41450215932077, location_id: 37189550162, available: 11}
+  
 ];
 
 function updateInventory(){
-testData.forEach(element => {
+itemsToUpdate.forEach(element => {
   var options = {
     'method': 'POST',
     'url': 'https://5d7873324b99aa9feeca55e01e8c02d9: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@barecykling.myshopify.com/admin/api/2021-04/inventory_levels/set.json',
@@ -111,7 +111,7 @@ testData.forEach(element => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      "location_id": 37189550162,
+      "location_id": livingsport_id,
       "inventory_item_id": element.inventory_item_id,
       "available": element.available
     })
@@ -119,28 +119,14 @@ testData.forEach(element => {
   };
   request(options, function (error, response) {
     if (error) throw new Error(error);
+    console.log('succes');
     console.log(response.body);
   }); 
 });
  
 }
 
-//setTimeout(getProductsFromShopify, 0);
-//setTimeout(getInventoryFromExcel, 1000);
-//setTimeout(compare, 3000);
-setTimeout(updateInventory);
-
-//https://5d7873324b99aa9feeca55e01e8c02d9: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@barecykling.myshopify.com/admin/api/2021-04/inventory_levels/set.json
-
-/* 
-Først kald shopify og få alle id'er
-sku'er + variants.inventory_item_id
-*/
-
-/* de id'er der skal bruges til at updatere en produkt variant.
-{
-  "location_id": 6884556842,
-  "inventory_item_id": 12250274365496,
-  "available": 11
-}
-*/
+setTimeout(getProductsFromShopify, 0);
+setTimeout(getInventoryFromExcel, 1000);
+setTimeout(compare, 3000);
+//setTimeout(updateInventory, 6000);
