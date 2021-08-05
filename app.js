@@ -1,6 +1,7 @@
 const csv = require('csv-parser');
 const fs = require('fs');
 var request = require('request');
+XLSX = require('xlsx');
 
 var resultsFromCsv = [];
 var itemFromShopify = [];
@@ -8,6 +9,13 @@ var itemsToUpdate = [];
 const location_id = '6884556842'; // baresundhed
 var livingsport_id = '37189582930';
 var counter = 1;
+var inputFilename = __dirname + '/Inventory_list_LivingSport.xlsx';
+var outputFilename = __dirname + '/Inventory_list_LivingSport.csv';
+function convertFile () {
+  const workBook = XLSX.readFile(inputFilename);
+  XLSX.writeFile(workBook, outputFilename, { bookType: "csv" });
+  console.log('done');
+}
 
 // shopify
 function getProductsFromShopify (){
@@ -125,8 +133,8 @@ itemsToUpdate.forEach(element => {
 });
  
 }
-
-setTimeout(getProductsFromShopify, 0);
-setTimeout(getInventoryFromExcel, 1000);
-setTimeout(compare, 3000);
+setTimeout(convertFile);
+setTimeout(getProductsFromShopify, 1000);
+setTimeout(getInventoryFromExcel, 3000);
+setTimeout(compare, 6000);
 //setTimeout(updateInventory, 6000);
